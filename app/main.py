@@ -1,9 +1,26 @@
 import uvicorn
 from fastapi import FastAPI
 
+from app.routers.users import router as users_router
+
+from app.models.ModelBase import Base
+from app.database import engine
+
+
+Base.metadata.create_all(bind=engine)
 
 def create_app():
     app = FastAPI()
+
+    # db initialize...
+
+    # redis initialize...
+
+    # middleware initialize...
+
+    # add routers...
+    app.include_router(users_router, tags=["users"])
+
     return app
 
 
