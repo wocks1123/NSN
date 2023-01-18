@@ -10,13 +10,29 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
+    profileMessage: str
+    profileImagePath: str
+    password: str
+
+
+class UserUpdate(UserBase):
+    profileMessage: str
+    profileImagePath: str
     password: str
 
 
 class UserResponse(UserBase):
-    id: int
-    # created_at: datetime
-    # updated_at: datetime
+    profileMessage: str
+    profileImagePath: str
+
+    class Config:
+        orm_mode = True
+
+
+class UserInPost(BaseModel):
+    userName: str
+    email: str
+    profileImagePath: str
 
     class Config:
         orm_mode = True
