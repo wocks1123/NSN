@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
-# from env import DB_USER, DB_PASSWORD, DB_HOST, DB_NAME
+
 
 DB_USER = "root"
 DB_PASSWORD = "qwe123"
@@ -28,12 +27,3 @@ SessionLocal = scoped_session(
         bind=engine
     )
 )
-
-# Dependency
-def get_db():
-    try:
-        db = SessionLocal()
-        yield db
-    finally:
-        db.close()
-        
