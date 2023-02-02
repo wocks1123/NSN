@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers.users import router as users_router
+from app.core.config import settings
 from app.db import Base, engine
 
 from app.models.ModelBase import Base
@@ -14,15 +15,9 @@ Base.metadata.create_all(bind=engine)
 def create_app():
     app = FastAPI()
 
-    # db initialize...
-    origins = [
-        "http://localhost",
-        "http://localhost:3000",
-    ]
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=origins,
-        # allow_origins=origins,
+        allow_origins=settings.CORS_ALLOW_ORIGIN,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

@@ -17,6 +17,12 @@ class Settings(BaseSettings):
     ALGORITHM: str = 'HS256'
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
+    CORS_ALLOW_ORIGIN = [
+        "http://localhost",
+        "http://localhost:3000",
+        "http://localhost:4000",
+     ]
+
     PORT: int = 8000
     DEBUG: bool = True
     HOST: str = 'localhost'
