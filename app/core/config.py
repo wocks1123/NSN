@@ -1,33 +1,86 @@
-from pydantic import BaseSettings
+import json
+
+from pydantic import BaseSettings, validator
 
 
-class Settings(BaseSettings):
-    PROJECT_NAME: str = 'NSN'
+class GlobalSettings(BaseSettings):
+    APP_ENV: str = 'dev'
+    ENV_STATE: str = 'dev'
+
+    @validator("*", pre=True)
+    def evaluate_lazy_columns(cls, v):
+        if isinstance(v, str) and v.startswith("["):
+            return json.loads(v)
+        return v
+
+    class Config:
+        env_file = '.env'
+
+
+class DevSettings(GlobalSettings):
+    PROJECT_NAME: str
 
     # DB SETTING
-    DB_USER: str = "root"
-    DB_PASSWORD: str = "qwe123"
-    DB_HOST: str = "localhost:3306"
-    DB_NAME: str = "nsn"
-    AUTO_COMMIT = False
-    DB_ECHO = True
+    DB_USER: str
+    DB_PASSWORD: str
+    DB_HOST: str
+    DB_NAME: str
+    AUTO_COMMIT: bool = False
+    DB_ECHO: bool = True
 
     # AUTH
-    SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-    ALGORITHM: str = 'HS256'
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    SECRET_KEY: str
+    ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
 
-    CORS_ALLOW_ORIGIN = [
-        "http://localhost",
-        "http://localhost:3000",
-        "http://localhost:4000",
-     ]
+    CORS_ALLOW_ORIGIN: list | str
 
-    PORT: int = 8000
-    DEBUG: bool = True
-    HOST: str = 'localhost'
+    PORT: int
+    DEBUG: bool
+    HOST: str
 
-    MEDIA_ROOT_PATH = "/mnt/d/data/img"
+    MEDIA_ROOT_PATH: str
+
+    class Config:
+        env_file = '.dev.env'
 
 
-settings = Settings()
+class ProdSettings(GlobalSettings):
+    PROJECT_NAME: str
+
+    # DB SETTING
+    DB_USER: str
+    DB_PASSWORD: str
+    DB_HOST: str
+    DB_NAME: str
+    AUTO_COMMIT: bool = False
+    DB_ECHO: bool = True
+
+    # AUTH
+    SECRET_KEY: str
+    ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
+
+    CORS_ALLOW_ORIGIN: list | str
+
+    PORT: int
+    DEBUG: bool
+    HOST: str
+
+    MEDIA_ROOT_PATH: str
+
+    class Config:
+        env_file = '.prod.env'
+
+
+class FactorySettings:
+    @staticmethod
+    def load():
+        env_state = GlobalSettings().ENV_STATE
+        if env_state == 'dev':
+            return DevSettings()
+        elif env_state == 'prod':
+            return ProdSettings()
+
+
+settings = FactorySettings.load()
