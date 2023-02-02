@@ -1,28 +1,25 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
+from app.core.config import settings
 
-DB_USER = "root"
-DB_PASSWORD = "qwe123"
-DB_HOST = "localhost:3306"
-DB_NAME = "nsn"
 
 DATABASE = 'mysql+pymysql://%s:%s@%s/%s?charset=utf8' % (
-    DB_USER,
-    DB_PASSWORD,
-    DB_HOST,
-    DB_NAME,
+    settings.DB_USER,
+    settings.DB_PASSWORD,
+    settings.DB_HOST,
+    settings.DB_NAME,
 )
 
 engine = create_engine(
     DATABASE,
     encoding='utf-8',
-    echo=True
+    echo=settings.DB_ECHO
 )
 
 SessionLocal = scoped_session(
     sessionmaker(
-        autocommit=False,
+        autocommit=settings.AUTO_COMMIT,
         autoflush=False,
         bind=engine
     )

@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers.users import router as users_router
+from app.db import Base, engine
 
 from app.models.ModelBase import Base
 from app.database import engine
@@ -30,6 +31,23 @@ def create_app():
     # redis initialize...
 
     # middleware initialize...
+    @app.middleware("http")
+    async def de_session_middleware(request: Request, call_next):
+        try:
+            session = scoped_session(
+                sessionmaker(
+                    autocommit=settings.AUTO_COMMIT,
+                    autoflush=False,
+                    bind=engine
+                )
+            )
+            request.state.db = session()
+            response = await call_next(request)
+        except Exception as e:
+            raise e from None
+        finally:
+            request.state.db.close()
+        return response
 
     # add routers...
     app.include_router(users_router, tags=["users"])
