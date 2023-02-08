@@ -8,11 +8,11 @@ from app.db.core import get_db
 from .schemas import (
     PostCreate,
     PostUpdate,
-    PostDelete,
     PostCreateResponse,
     PostResponse,
     PostOneResponse,
-    PostCardResponse
+    PostCardResponse,
+    PostDeleteResponse,
 )
 from .service import (
     create,
@@ -22,7 +22,7 @@ from .service import (
     get_followers_posts,
     get_scrapped_posts,
     update,
-    delete
+    delete_by_post_id
 )
 
 post_router = APIRouter()
@@ -79,7 +79,7 @@ def update_post(post_id: int, post_in: PostUpdate, db_session: Session = Depends
     return post
 
 
-@post_router.delete("/{post_id}", response_model=PostOneResponse)
-def delete_post(post_in: PostDelete, db_session: Session = Depends(get_db)):
-    post = delete(db_session=db_session, post_in=post_in)
+@post_router.delete("/{post_id}", response_model=PostDeleteResponse)
+def delete_post(post_id: int, db_session: Session = Depends(get_db)):
+    post = delete_by_post_id(db_session=db_session, post_id=post_id)
     return post

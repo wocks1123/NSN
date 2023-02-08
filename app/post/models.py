@@ -33,7 +33,7 @@ class Post(Base):
     comment_count = column_property(
         select([func.count(Comment.id)]).filter(Comment.post_id == id).scalar_subquery()
     )
-    media = relationship("PostMedia", back_populates="post")
+    media = relationship("PostMedia", back_populates="post", cascade="all, delete-orphan")
 
     scrap = relationship(
         "User",
@@ -49,7 +49,7 @@ class Post(Base):
 
 
 class PostMedia(Base):
-    post_id = Column(Integer, ForeignKey("post.id"), primary_key=True)
+    post_id = Column(Integer, ForeignKey("post.id", ondelete="CASCADE"), primary_key=True)
     identifier = Column(String(64), primary_key=True)
-    media_type = Column(String(8), nullable=False)   # image, video, audio, ...
+    media_type = Column(String(16), nullable=False)   # image, video, audio, ...
     post = relationship("Post", back_populates="media")

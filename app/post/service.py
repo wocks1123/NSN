@@ -203,3 +203,15 @@ def delete(
     db_session.delete(post)
     db_session.commit()
     return post
+
+
+def delete_by_post_id(
+    *,
+    db_session: Session,
+    post_id: int
+) -> Post:
+    post = db_session.query(Post) \
+        .filter(Post.id == post_id).one_or_none()
+    db_session.delete(post)
+    db_session.commit()
+    return post

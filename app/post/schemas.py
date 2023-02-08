@@ -80,3 +80,7 @@ class PostCardResponse(NSNBase):
     liked_count: int
     comment_count: int
     media: List[PostMediaBase]
+
+
+class PostDeleteResponse(NSNBase):
+    id: int
