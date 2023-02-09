@@ -20,7 +20,7 @@ services:
     container_name: app
     image: nsn_app
     build:
-      context: ./app
+      context: .
       dockerfile: Dockerfile
     expose:
       - 8000
@@ -29,7 +29,8 @@ services:
 #    networks:
 #      - nginx_network
     environment:
-      ENV_STATE: prod
+      ENV_STATE: "prod"
+      TZ: "Asia/Seoul"
     volumes:
       - ./app:/workspace/app
     command: "uvicorn app.main:create_app --host 0.0.0.0 --port 8000 --reload"
