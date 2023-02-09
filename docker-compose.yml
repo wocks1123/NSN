@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+#  web:
+#    container_name: web
+#    image: nginx
+#    depends_on:
+#      # `app`Because the service (container) needs to be started first`depends_on`Is specified
+#      - app
+#    ports:
+#      #Port mapping:"Host OS port:container(Nginx)Port"
+#      - "80:80"
+#    volumes:
+#      #volume mount:"Host OS path:Path in the container"
+#      - ./web/conf.d:/etc/nginx/conf.d
+#    networks:
+#      - nginx_network
+
+  app:
+    container_name: app
+    image: nsn_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - 8000
+    ports:
+      - 8000:8000
+#    networks:
+#      - nginx_network
+    environment:
+      ENV_STATE: "prod"
+      TZ: "Asia/Seoul"
+    volumes:
+      - ./app:/workspace/app
+    command: "uvicorn app.main:create_app --host 0.0.0.0 --port 8000 --reload"
+
+#networks:
+#  nginx_network:
+#    driver: bridge
