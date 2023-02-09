@@ -24,10 +24,14 @@
 
 ## 구조도
 
-![구조도](https://i.imgur.com/dmdlTw7.png)
+![구조도](./image/architecture.png)
 
 - nginx로 로드밸런싱
 - jenkins 서버로 CI/CD
+
+## ERD
+
+![구조도](./image/erd.png)
 
 ## 배포 서버
 
