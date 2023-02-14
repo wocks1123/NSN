@@ -22,6 +22,14 @@
 - 좋아요
 - 스크랩
 
+## Use Case
+
+- [Wiki](https://github.com/wocks1123/NSN/wiki/Use-Case)
+
+## Business Logic
+
+- [Wiki](https://github.com/wocks1123/NSN/wiki/Business-Logic)
+
 ## 구조도
 
 ![구조도](./image/architecture.png)
